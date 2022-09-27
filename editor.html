@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="text/html; charset=UTF-8; X-Content-Type-Options=nosniff" http-equiv="Content-Type" />
+    <title>Trip-Render Editor</title>
+
+    <link rel="stylesheet" href="codemirror/codemirror.css">
+    <script src="codemirror/codemirror.js"></script>
+
+    <style>
+        body {
+            margin: 0em;
+        }
+        
+        .CodeMirror {
+            flex-grow: 1;
+            height: auto;
+        }
+        
+        #render {
+            border: none;
+        }
+        
+        .parent {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            grid-template-rows: repeat(7, 1fr) 0.25fr;
+            grid-column-gap: 0px;
+            grid-row-gap: 0px;
+            width: 100%;
+            height: 100vh;
+        }
+        
+        .container {
+            display: flex;
+            padding: .1em;
+            background-color: lightgray;
+        }
+        
+        .editor {
+            grid-area: 1 / 1 / 9 / 2;
+        }
+        
+        .output {
+            grid-area: 1 / 2 / 8 / 3;
+        }
+        
+        .result {
+            grid-area: 8 / 2 / 9 / 3;
+        }
+        
+        .fg1 {
+            flex-grow: 1;
+        }
+        
+        input {
+            border: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="parent">
+        <div class="editor container" id="editor"></div>
+        <div class="output container"><iframe id="render" class="fg1"></iframe></div>
+        <div class="result container"><input id="result" class="fg1"></div>
+    </div>
+
+    <script>
+        let cm = CodeMirror(document.getElementById('editor'), {
+            lineNumbers: true
+        })
+
+        cm.on('changes', () => {
+            const val = btoa(cm.getValue('\r\n'))
+            document.getElementById('render').src = 'http://localhost:3000/get/' + val
+            document.getElementById('result').value = 'http://localhost:3000/get/' + val
+        })
+    </script>
+</body>
+
+</html>

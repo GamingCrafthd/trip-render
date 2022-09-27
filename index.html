@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trip-Render</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <style>
+        .container {
+            margin: 1em;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2>Trip-Render</h2>
+
+        <input type="file" id="files" name="files">
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="new-tab">
+            <label class="form-check-label" for="new-tab">
+              In neuen Tab öffnen
+            </label>
+        </div>
+    </div>
+
+    <script>
+        const NEW_TAB = '_blank'
+        const SAME_TAB = '_self'
+
+        if (window.File && window.FileReader && window.FileList && window.Blob) {
+            document.getElementById('files').addEventListener('change', handleFileSelect, false)
+        } else alert('The File APIs are not fully supported in this browser.')
+
+        function handleFileSelect(evt) {
+            var f = evt.target.files[0]
+            var reader = new FileReader()
+            reader.onload = (theFile => {
+                return e => window.open('http://localhost:3000/get/' + window.btoa(e.target.result), document.getElementById('new-tab').checked ? NEW_TAB : SAME_TAB).focus()
+            })(f)
+            reader.readAsBinaryString(f)
+        }
+    </script>
+</body>
+
+</html>
